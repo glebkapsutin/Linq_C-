@@ -13,9 +13,7 @@ namespace Linq_C_
         {
 
 
-            GroupProducts();
-
-
+            AnalyzeOrdersByDate();
 
 
         }
@@ -58,7 +56,72 @@ namespace Linq_C_
             }
 
         }
+        public static void JoinOrderAndProducts()
+        {
+            var Base = new InitialCreate();
+            var products = Base.products;
 
+            var result = Base.orders.Join(
+                products,
+                o => o.ProductId,
+                p => p.Id,
+                (o, p) => new { Order = o, Products = p }
+
+
+
+            ).Select(g => new { g.Products.Name, g.Order.Quantity, TotalPrice = g.Order.Quantity * g.Products.Price });
+            int count = 1;
+            foreach (var item in result)
+            {
+                Console.WriteLine($"{count}  Название: {item.Name}\tКоличество : {item.Quantity}\tОбщая цена: {item.TotalPrice}");
+                count += 1;
+            }
+        }
+
+        public static void AnyAllOrderAndProducts()
+        {
+            var Base = new InitialCreate();
+
+            var products = Base.products;
+            bool check = Base.orders.Any(x=>x.Quantity > 4);
+
+            var ProductResult = products
+                        .GroupBy(x=> x.Category)
+                        .Where(g=> g.All(x=>x.Price > 50 ))
+                        .Select(g=> g.Key)
+                        .ToList();
+            
+            Console.WriteLine($"Есть заказы с количеством > 4:{check}");
+            foreach (var product in ProductResult)
+            {
+                Console.WriteLine(product);
+            }
+
+                        
+        }
+        public static void AnalyzeOrdersByDate()
+        {
+            var Base = new InitialCreate();
+ 
+            var result = Base.orders
+                .Join( Base.products,
+                o => o.ProductId,
+                p => p.Id,
+                (o, p) => new { Order = o, Products = p })
+                .GroupBy(x=> x.Order.OrderDate)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    TotalQuantity = g.Sum(x => x.Order.Quantity),
+                    ProductNames = string.Join(", ",g.Select(x => x.Products.Name).Distinct().OrderBy(name => name))
+                })
+                .OrderByDescending(g => g.Date);
+            
+            foreach (var item in result)
+            {
+                Console.WriteLine($"Дата: {item.Date:dd.MM.yyyy}, Количество: {item.TotalQuantity}, Продукты: {item.ProductNames}");
+            }
+        }
 
     }
 
