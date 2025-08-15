@@ -39,6 +39,7 @@ namespace Linq_C_
             {
                 Console.WriteLine($"Название: {product.Name}, цена: {product.Price:F2}");
 
+
             }
 
         }
