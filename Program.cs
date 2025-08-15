@@ -27,6 +27,7 @@ namespace Linq_C_
             {
                 Console.WriteLine($"Название: {product.Name}, Новая цена: {product.NewPrice:F2}");
 
+
             }
         }
         public static void SortedProducts()
