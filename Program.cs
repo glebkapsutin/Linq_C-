@@ -25,6 +25,7 @@ namespace Linq_C_
                               .Select(p => new { p.Name, NewPrice = p.Price * 1.05m });
             foreach (var product in products)
             {
+
                 Console.WriteLine($"Название: {product.Name}, Новая цена: {product.NewPrice:F2}");
 
 
