@@ -38,6 +38,7 @@ namespace Linq_C_
             foreach (var product in products)
             {
                 Console.WriteLine($"Название: {product.Name}, цена: {product.Price:F2}");
+
             }
 
         }
