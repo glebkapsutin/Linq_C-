@@ -20,6 +20,7 @@ namespace Linq_C_
         public static void ProductsCountPrice40()
         {
             var Base = new InitialCreate();
+
             var products = Base.products
                               .Where(x => x.Category == "Фрукты" && x.Price > 40)
                               .Select(p => new { p.Name, NewPrice = p.Price * 1.05m });
